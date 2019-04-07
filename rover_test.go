@@ -18,6 +18,10 @@ func TestMoveRover(t *testing.T) {
 		{"1 1 S M", "1 0 S"},
 		{"0 0 S M", "0 0 S"},
 		{"5 5 N M", "5 5 N"},
+		{"1 1 N L", "1 1 W"},
+		{"1 1 E L", "1 1 N"},
+		{"1 1 W L", "1 1 S"},
+		{"1 1 S L", "1 1 E"},
 		{"1 2 N LMLMLMLMM", "1 3 N"},
 		{"3 3 E MMRMMRMRRM", "5 1 E"},
 	}
