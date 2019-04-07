@@ -37,7 +37,7 @@ func ReadInputFromFile(fileName string) ([]Rover, error) {
 	tmp := strings.Split(inputLines[0], " ")
 	xmax, _ = strconv.Atoi(tmp[0])
 	ymax, _ = strconv.Atoi(tmp[1])
-
+	plateau := NewPlateau(xmax, ymax)
 	rovers := make([]Rover, xmax*ymax)
 	for i := 1; i < len(inputLines); i = i + 2 {
 		tmp := strings.Split(inputLines[i], " ")
@@ -47,7 +47,7 @@ func ReadInputFromFile(fileName string) ([]Rover, error) {
 		instructions := inputLines[i+1]
 
 		rover := NewRover(x, y, heading)
-		rover.ExecuteIntructions([]rune(instructions))
+		rover.ExecuteIntructions([]rune(instructions), plateau)
 		rovers = append(rovers, rover)
 	}
 	return rovers, nil

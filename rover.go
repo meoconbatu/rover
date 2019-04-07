@@ -19,10 +19,16 @@ func (r Rover) String() string {
 	out.WriteString(strconv.Itoa(r.x) + " " + strconv.Itoa(r.y) + " " + r.heading)
 	return out.String()
 }
-func (r *Rover) ExecuteIntructions(instructions []rune) {
+func (r *Rover) ExecuteIntructions(instructions []rune, plateau Plateau) {
 	for _, instruction := range instructions {
 		switch instruction {
 		case 'M':
+			if (r.heading == "N" && r.y == plateau.y) ||
+				(r.heading == "E" && r.x == plateau.x) ||
+				(r.heading == "W" && r.x == 0) ||
+				(r.heading == "S" && r.x == 0) {
+				return
+			}
 			r.move()
 		case 'L':
 			r.turnLeft()
@@ -41,12 +47,6 @@ func (r *Rover) move() {
 		r.x = r.x - 1
 	case "S":
 		r.y = r.y - 1
-	}
-	if r.x < 0 {
-		r.x = 0
-	}
-	if r.y < 0 {
-		r.y = 0
 	}
 }
 func (r *Rover) turnLeft() {
