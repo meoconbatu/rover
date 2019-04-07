@@ -38,7 +38,7 @@ func ReadInputFromFile(fileName string) ([]Rover, error) {
 	xmax, _ = strconv.Atoi(tmp[0])
 	ymax, _ = strconv.Atoi(tmp[1])
 	plateau := NewPlateau(xmax, ymax)
-	rovers := make([]Rover, xmax*ymax)
+	rovers := make([]Rover, 0)
 	for i := 1; i < len(inputLines); i = i + 2 {
 		tmp := strings.Split(inputLines[i], " ")
 		x, _ := strconv.Atoi(tmp[0])

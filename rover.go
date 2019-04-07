@@ -26,8 +26,8 @@ func (r *Rover) ExecuteIntructions(instructions []rune, plateau Plateau) {
 			if (r.heading == "N" && r.y == plateau.y) ||
 				(r.heading == "E" && r.x == plateau.x) ||
 				(r.heading == "W" && r.x == 0) ||
-				(r.heading == "S" && r.x == 0) {
-				return
+				(r.heading == "S" && r.y == 0) {
+				continue
 			}
 			r.move()
 		case 'L':

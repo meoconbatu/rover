@@ -18,6 +18,8 @@ func TestMoveRover(t *testing.T) {
 		{"1 1 S M", "1 0 S"},
 		{"0 0 S M", "0 0 S"},
 		{"5 5 N M", "5 5 N"},
+		{"1 2 N LMLMLMLMM", "1 3 N"},
+		{"3 3 E MMRMMRMRRM", "5 1 E"},
 	}
 	plateau := Plateau{x: 5, y: 5}
 	for _, tt := range tests {
