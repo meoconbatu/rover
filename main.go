@@ -25,11 +25,12 @@ func main() {
 	for i := 0; i < len(rovers); i++ {
 		rovers[i].ExecuteInstructions(*plateau)
 	}
-	err = writeOutputToFile(rovers)
-	if err != nil {
-		fmt.Println("error", err)
-		return
-	}
+	// err = writeOutputToFile(rovers)
+	// if err != nil {
+	// 	fmt.Println("error", err)
+	// 	return
+	// }
+	writeOutputToConsole(rovers)
 }
 func readInputFromFile(fileName string) ([]Rover, *Plateau, error) {
 	input, err := ioutil.ReadFile(fileName)
@@ -73,4 +74,9 @@ func writeOutputToFile(rovers []Rover) error {
 	}
 	w.Flush()
 	return nil
+}
+func writeOutputToConsole(rovers []Rover) {
+	for _, rover := range rovers {
+		fmt.Println(rover.String())
+	}
 }
