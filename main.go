@@ -10,14 +10,20 @@ import (
 )
 
 func main() {
-	var plateau Plateau
-	rovers, err := readInputFromFile("input.txt", plateau)
+	var plateau *Plateau
+	if len(os.Args) == 1 {
+		fmt.Println("missing input file name")
+		return
+	}
+	inputFileName := os.Args[1]
+
+	rovers, plateau, err := readInputFromFile(inputFileName)
 	if err != nil {
 		fmt.Println("error", err)
 		return
 	}
 	for i := 0; i < len(rovers); i++ {
-		rovers[i].ExecuteInstructions(plateau)
+		rovers[i].ExecuteInstructions(*plateau)
 	}
 	err = writeOutputToFile(rovers)
 	if err != nil {
@@ -25,11 +31,11 @@ func main() {
 		return
 	}
 }
-func readInputFromFile(fileName string, plateau Plateau) ([]Rover, error) {
+func readInputFromFile(fileName string) ([]Rover, *Plateau, error) {
 	input, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		fmt.Println("File reading error", err)
-		return nil, err
+		return nil, nil, err
 	}
 
 	inputLines := strings.Split(string(input), "\n")
@@ -37,7 +43,7 @@ func readInputFromFile(fileName string, plateau Plateau) ([]Rover, error) {
 	tmp := strings.Split(inputLines[0], " ")
 	xmax, _ := strconv.Atoi(tmp[0])
 	ymax, _ := strconv.Atoi(tmp[1])
-	plateau = NewPlateau(xmax, ymax)
+	plateau := NewPlateau(xmax, ymax)
 
 	rovers := make([]Rover, 0)
 
@@ -50,7 +56,7 @@ func readInputFromFile(fileName string, plateau Plateau) ([]Rover, error) {
 		rover := NewRover(x, y, heading, []rune(instructions))
 		rovers = append(rovers, rover)
 	}
-	return rovers, nil
+	return rovers, &plateau, nil
 }
 func writeOutputToFile(rovers []Rover) error {
 	f, err := os.Create("output.txt")
