@@ -9,27 +9,23 @@ import (
 	"strings"
 )
 
-var (
-	instructions []string
-	plateau      Plateau
-)
-
 func main() {
-	rovers, err := ReadInputFromFile("input.txt")
+	var plateau Plateau
+	rovers, err := readInputFromFile("input.txt", plateau)
 	if err != nil {
 		fmt.Println("error", err)
 		return
 	}
 	for i := 0; i < len(rovers); i++ {
-		rovers[i].ExecuteIntructions([]rune(instructions[i]), plateau)
+		rovers[i].ExecuteInstructions(plateau)
 	}
-	err = WriteOutputToFile(rovers)
+	err = writeOutputToFile(rovers)
 	if err != nil {
 		fmt.Println("error", err)
 		return
 	}
 }
-func ReadInputFromFile(fileName string) ([]Rover, error) {
+func readInputFromFile(fileName string, plateau Plateau) ([]Rover, error) {
 	input, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		fmt.Println("File reading error", err)
@@ -44,21 +40,19 @@ func ReadInputFromFile(fileName string) ([]Rover, error) {
 	plateau = NewPlateau(xmax, ymax)
 
 	rovers := make([]Rover, 0)
-	instructions = make([]string, 0)
 
 	for i := 1; i < len(inputLines); i = i + 2 {
 		tmp := strings.Split(inputLines[i], " ")
 		x, _ := strconv.Atoi(tmp[0])
 		y, _ := strconv.Atoi(tmp[1])
 		heading := tmp[2]
-		instruction := inputLines[i+1]
-		instructions = append(instructions, instruction)
-		rover := NewRover(x, y, heading)
+		instructions := inputLines[i+1]
+		rover := NewRover(x, y, heading, []rune(instructions))
 		rovers = append(rovers, rover)
 	}
 	return rovers, nil
 }
-func WriteOutputToFile(rovers []Rover) error {
+func writeOutputToFile(rovers []Rover) error {
 	f, err := os.Create("output.txt")
 	if err != nil {
 		return err

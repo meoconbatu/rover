@@ -5,22 +5,28 @@ import (
 	"strconv"
 )
 
+// Rover information of rover
 type Rover struct {
-	x, y    int
-	heading string
-	// steps   []rune
+	x, y         int
+	heading      string
+	instructions []rune
 }
 
-func NewRover(x, y int, heading string) Rover {
-	return Rover{x: x, y: y, heading: heading}
+// NewRover create a new rover
+func NewRover(x, y int, heading string, instructions []rune) Rover {
+	return Rover{x: x, y: y, heading: heading, instructions: instructions}
 }
+
+// String print infomation of rover
 func (r Rover) String() string {
 	var out bytes.Buffer
 	out.WriteString(strconv.Itoa(r.x) + " " + strconv.Itoa(r.y) + " " + r.heading)
 	return out.String()
 }
-func (r *Rover) ExecuteIntructions(instructions []rune, plateau Plateau) {
-	for _, instruction := range instructions {
+
+// ExecuteInstructions execute instruction
+func (r *Rover) ExecuteInstructions(plateau Plateau) {
+	for _, instruction := range r.instructions {
 		switch instruction {
 		case 'M':
 			if (r.heading == "N" && r.y == plateau.y) ||

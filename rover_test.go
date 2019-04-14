@@ -25,15 +25,15 @@ func TestMoveRover(t *testing.T) {
 		{"1 2 N LMLMLMLMM", "1 3 N"},
 		{"3 3 E MMRMMRMRRM", "5 1 E"},
 	}
-	plateau := Plateau{x: 5, y: 5}
+	plateau := NewPlateau(5, 5)
 	for _, tt := range tests {
 		tmp := strings.Split(tt.input, " ")
 		x, _ := strconv.Atoi(tmp[0])
 		y, _ := strconv.Atoi(tmp[1])
 		heading := tmp[2]
 		steps := tmp[3]
-		rover := NewRover(x, y, heading)
-		rover.ExecuteIntructions([]rune(steps), plateau)
+		rover := NewRover(x, y, heading, []rune(steps))
+		rover.ExecuteInstructions(plateau)
 
 		if rover.String() != tt.expected {
 			t.Errorf("rover got wrong position. got=%v, want=%v", rover.String(), tt.expected)
