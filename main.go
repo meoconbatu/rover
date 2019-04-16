@@ -7,16 +7,33 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 func main() {
-	var plateau *Plateau
-	if len(os.Args) == 1 {
-		fmt.Println("missing input file name")
-		return
+	var inputFileName, outputFileName string
+	var runCmd = &cobra.Command{
+		Use:   "run [string to echo]",
+		Short: "Run rover",
+		Long: `echo things multiple times back to the user by providing
+	a count and a string.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			Run(inputFileName, outputFileName)
+		},
 	}
-	inputFileName := os.Args[1]
 
+	runCmd.Flags().StringVarP(&inputFileName, "input", "i", "", "input file name")
+	runCmd.MarkFlagRequired("input")
+
+	runCmd.Flags().StringVarP(&outputFileName, "output", "o", "", "output file name")
+
+	var rootCmd = &cobra.Command{Use: "rover"}
+	rootCmd.AddCommand(runCmd)
+	rootCmd.Execute()
+}
+func Run(inputFileName, outputFileName string) {
+	var plateau *Plateau
 	rovers, plateau, err := readInputFromFile(inputFileName)
 	if err != nil {
 		fmt.Println("error", err)
@@ -25,12 +42,11 @@ func main() {
 	for i := 0; i < len(rovers); i++ {
 		rovers[i].ExecuteInstructions(*plateau)
 	}
-	// err = writeOutputToFile(rovers)
-	// if err != nil {
-	// 	fmt.Println("error", err)
-	// 	return
-	// }
-	writeOutputToConsole(rovers)
+	if outputFileName != "" {
+		writeOutputToFile(rovers, outputFileName)
+	} else {
+		writeOutputToConsole(rovers)
+	}
 }
 func readInputFromFile(fileName string) ([]Rover, *Plateau, error) {
 	input, err := ioutil.ReadFile(fileName)
@@ -59,8 +75,8 @@ func readInputFromFile(fileName string) ([]Rover, *Plateau, error) {
 	}
 	return rovers, &plateau, nil
 }
-func writeOutputToFile(rovers []Rover) error {
-	f, err := os.Create("output.txt")
+func writeOutputToFile(rovers []Rover, outputFileName string) error {
+	f, err := os.Create(outputFileName)
 	if err != nil {
 		return err
 	}
